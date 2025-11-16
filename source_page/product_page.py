@@ -2,6 +2,7 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 
 class ProductPage:
@@ -51,7 +52,7 @@ class ProductPage:
 
     def validate_social_media_links(self, soc_media):
         if soc_media not in self.social_media_links:
-            raise ValueError(f"Unknown social media :", {soc_media})
+            raise ValueError(f"Unknown social media :, {soc_media}")
         main_url = self.driver.current_url
         locator = self.social_media_links[soc_media]
         self.driver.find_element(*locator).click()
@@ -73,5 +74,5 @@ class ProductPage:
         try:
             menu = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//a[@id='about_sidebar_link']")))
             return menu.is_displayed()
-        except:
+        except TimeoutException:
             return False
